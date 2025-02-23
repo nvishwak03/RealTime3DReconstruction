@@ -11,19 +11,19 @@ SEGMENTATION_MODEL_PATH = "yolo11n-seg.pt"
 detection_model = YOLO(DETECTION_MODEL_PATH)
 segmentation_model = YOLO(SEGMENTATION_MODEL_PATH)
 
-# Load MiDaS Small model
-midas = torch.hub.load("intel-isl/MiDaS", "MiDaS_small")
+# Load DPT-Hybrid model (middle ground between Small and Large)
+midas = torch.hub.load("intel-isl/MiDaS", "DPT_Hybrid")
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 midas.to(device)
 midas.eval()
 
-# Load MiDaS transforms
+# Load MiDaS transforms for DPT-Hybrid
 midas_transforms = torch.hub.load("intel-isl/MiDaS", "transforms")
-transform = midas_transforms.small_transform
+transform = midas_transforms.dpt_transform  # Transform specific to DPT models
 
 def estimate_depth(image, model_type="detection"):
     """
-    Estimate depth for detected or segmented objects in the image.
+    Estimate depth for detected or segmented objects in the image using DPT-Hybrid.
     model_type: 'detection' for bounding boxes, 'segmentation' for masks
     """
     # Select the appropriate YOLO model
