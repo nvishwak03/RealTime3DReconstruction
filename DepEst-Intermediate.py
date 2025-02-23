@@ -53,7 +53,9 @@ def estimate_depth(image, model_type="detection"):
     
     # Normalize depth map for visualization
     depth_map_normalized = cv2.normalize(depth_map, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
-    depth_map_colored = cv2.applyColorMap(depth_map_normalized, cv2.COLORMAP_INFERNO)
+    depth_map_colored = depth_map_normalized  # Pure grayscale (black to white)
+    # Alternative: Use depth_map_colored = cv2.applyColorMap(depth_map_normalized, cv2.COLORMAP_BONE) for tinted grayscale
+    # For white-to-grey: depth_map_colored = 255 - depth_map_normalized
     
     # Process YOLO results and overlay depth information
     output_image = image.copy()
